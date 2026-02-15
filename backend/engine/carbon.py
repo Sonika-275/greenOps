@@ -46,16 +46,6 @@ def annual_projection(co2_per_run: float, executions_per_day: int = 10000) -> di
     }
 
 
-def carbon_recommendation(region: str) -> str:
-    """
-    Suggest sustainability improvements based on region.
-    """
-    if region == "India":
-        return "Consider deploying in regions with lower grid carbon intensity (e.g., EU) or use renewable-powered cloud providers."
-    elif region == "USA":
-        return "Optimize workloads or choose renewable-powered cloud zones for reduced emissions."
-    else:
-        return "Deployment region has relatively lower grid emissions. Continue optimizing compute efficiency."
 
 # mathematical calculation for compare.py
 def compare_optimization( 

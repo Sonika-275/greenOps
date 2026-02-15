@@ -1,9 +1,11 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from models import AnalyzeResponse
 from engine.analyzer import analyze_code
 from engine.scoring import calculate_green_score
-from engine.carbon import (estimate_energy,estimate_co2,annual_projection,carbon_recommendation)
+from engine.carbon import (estimate_energy,estimate_co2,annual_projection)
 from engine.compare import analyze_comparison  
+from engine.rules import get_rule
 
 
 
@@ -34,26 +36,45 @@ def read_root():
 def health_check():
     return {"status": "OK"}
 
-
-@app.post("/analyze")
+ #---------------------------
+# analyse endpoint
+# ---------------------------
+@app.post("/analyze", response_model=AnalyzeResponse)
 def analyze(request: CodeRequest):
     region = "India"
 
+    # Run analyzer
     result = analyze_code(request.code)
-    green_score = calculate_green_score(result["total_operation_weight"]) 
-    energy = estimate_energy(result["total_operation_weight"])
+    issues = result["issues"]
+    total_weight = result["total_operation_weight"]
+
+    # Scoring
+    green_score = calculate_green_score(total_weight) 
+
+    # Carbon Estimation 
+    energy = estimate_energy(total_weight)
     co2 = estimate_co2(energy, region=region)
     projection = annual_projection(co2)
-    recommendation = carbon_recommendation(region)
 
+    # Fetch suggestions from rules.py
+    optimization_recommendations = list(
+        set(
+            get_rule(issue["rule_id"])["suggestion"]
+            for issue in issues
+            if get_rule(issue["rule_id"]) is not None
+        )
+    )
+
+    
     return {
         "green_score": green_score, # from scoring.py
         "total_operation_weight": result["total_operation_weight"], # from analyzer.py
         "estimated_energy_kwh": energy,     # from carbon.py
         "estimated_co2_kg":  co2,           # from carbon.py
         "annual_projection": projection,    # from carbon.py
-        "carbon_recommendation": recommendation,  # from carbon.py
-        "issues": result["issues"] # from analyzer.py
+         "issues": issues,                  # from analyzer.py
+        "optimization_recommendations": optimization_recommendations # from rules.py
+       
     }
 
 

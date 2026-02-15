@@ -3,15 +3,22 @@ RULES = {
         "rule_name": "Nested Loop Detected",
         "base_operation_weight": 40,
         "severity": "Very High",
-        "suggestion": "Reduce nested iterations using hashmap or precomputed lookup."
+        "suggestion": "Reduce nested iterations using hashmap, set lookup, or precomputed data structures to avoid quadratic complexity."
     },
-    "R6": {
-         "rule_name": "Inefficient Membership Check",
-         "base_operation_weight": 20,
-         "severity": "Medium",
-         "suggestion": "Convert list to set for O(1) membership lookup when used repeatedly."
-}
 
+    "R2": {
+        "rule_name": "Inefficient Membership Check Inside Loop",
+        "base_operation_weight": 20,
+        "severity": "High",
+        "suggestion": "Convert list to set for O(1) membership lookup when used repeatedly inside loops."
+    },
+
+    "R3": {
+        "rule_name": "Constant Object Creation Inside Loop",
+        "base_operation_weight": 15,
+        "severity": "Medium",
+        "suggestion": "Move constant list/dict/set creation outside the loop to prevent repeated memory allocation."
+    }
 }
 
 
