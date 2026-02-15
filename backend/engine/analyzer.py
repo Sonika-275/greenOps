@@ -55,12 +55,6 @@ def detect_nested_loops(tree):
 
 
 def detect_inefficient_membership(tree):
-    """
-    Detect inefficient membership checks (R6) in loops.
-    Flags membership in lists (list() or list literals) as inefficient.
-    Ignores sets and dicts for optimized code.
-    Does NOT over-flag unknown types.
-    """
     issues = []
 
     for node in ast.walk(tree):
@@ -68,42 +62,15 @@ def detect_inefficient_membership(tree):
             for child in ast.walk(node):
                 if isinstance(child, ast.Compare):
                     if isinstance(child.ops[0], ast.In):
-                        comparator = child.comparators[0]
+                        rule = get_rule("R6")
 
-                        # Case 1: list() call → inefficient
-                        if isinstance(comparator, ast.Call) and isinstance(comparator.func, ast.Name):
-                            if comparator.func.id == "list":
-                                rule = get_rule("R6")
-                                issues.append({
-                                    "rule_id": "R6",
-                                    "message": rule["rule_name"],
-                                    "line": child.lineno,
-                                    "weight": rule["base_operation_weight"],
-                                    "severity": rule["severity"],
-                                    "suggestion": rule["suggestion"]
-                                })
-                            # set or dict → efficient
-                            elif comparator.func.id in ("set", "dict"):
-                                continue
-
-                        # Case 2: direct list literal → inefficient
-                        elif isinstance(comparator, ast.List):
-                            rule = get_rule("R6")
-                            issues.append({
-                                "rule_id": "R6",
-                                "message": rule["rule_name"],
-                                "line": child.lineno,
-                                "weight": rule["base_operation_weight"],
-                                "severity": rule["severity"],
-                                "suggestion": rule["suggestion"]
-                            })
-
-                        # Case 3: set/dict literal → efficient
-                        elif isinstance(comparator, (ast.Set, ast.Dict)):
-                            continue
-
-                        # Case 4: unknown → skip (no over-flagging)
-                        else:
-                            continue
+                        issues.append({
+                            "rule_id": "R6",
+                            "message": rule["rule_name"],
+                            "line": child.lineno,
+                            "weight": rule["base_operation_weight"],
+                            "severity": rule["severity"],
+                            "suggestion": rule["suggestion"]
+                        })
 
     return issues
