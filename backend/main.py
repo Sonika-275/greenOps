@@ -1,15 +1,27 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+
 from models import AnalyzeResponse
 from engine.analyzer import analyze_code
 from engine.scoring import calculate_green_score
-from engine.carbon import (estimate_energy,estimate_co2,annual_projection)
+from engine.carbon import (estimate_energy,estimate_co2)
 from engine.compare import analyze_comparison  
 from engine.rules import get_rule
 
 
 
 app = FastAPI()
+
+#CORS 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allow all origins for dev
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 # ---------------------------
 # Request Models
@@ -54,7 +66,6 @@ def analyze(request: CodeRequest):
     # Carbon Estimation 
     energy = estimate_energy(total_weight)
     co2 = estimate_co2(energy, region=region)
-    projection = annual_projection(co2)
 
     # Fetch suggestions from rules.py
     optimization_recommendations = list(
@@ -68,11 +79,8 @@ def analyze(request: CodeRequest):
     
     return {
         "green_score": green_score, # from scoring.py
-        "total_operation_weight": result["total_operation_weight"], # from analyzer.py
-        "estimated_energy_kwh": energy,     # from carbon.py
         "estimated_co2_kg":  co2,           # from carbon.py
-        "annual_projection": projection,    # from carbon.py
-         "issues": issues,                  # from analyzer.py
+        "issues": issues,                  # from analyzer.py
         "optimization_recommendations": optimization_recommendations # from rules.py
        
     }

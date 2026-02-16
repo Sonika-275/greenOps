@@ -18,8 +18,8 @@ def estimate_energy(total_operation_weight: float) -> float:
     """
     Estimate energy consumption in kWh based on operation weight.
     """
-    energy_factor =  0.000001  # Tunable
-    return round(total_operation_weight * energy_factor, 8)
+    energy_factor =  0.00002  # Tunable
+    return round(total_operation_weight * energy_factor, 3)
 
 
 def estimate_co2(energy_kwh: float, region: str = "India") -> float:
@@ -27,10 +27,10 @@ def estimate_co2(energy_kwh: float, region: str = "India") -> float:
     Estimate CO2 emissions based on energy and region.
     """
     intensity = GRID_INTENSITY.get(region, 0.7)
-    return round(energy_kwh * intensity, 8)
+    return round(energy_kwh * intensity, 3)
 
 
-def annual_projection(co2_per_run: float, executions_per_day: int = 10000) -> dict:
+def annual_projection(co2_per_run: float, executions_per_day: int = 40000) -> dict:
     """
     Project annual carbon impact based on daily executions.
     """
