@@ -16,13 +16,19 @@ def analyze_comparison(original_code: str, optimized_code: str, region: str = "I
     orig_energy = estimate_energy(orig_weight)
     orig_co2 = estimate_co2(orig_energy, region)
     orig_score = calculate_green_score(orig_weight)
-    orig_recommendations = list(
-        set(
-            get_rule(issue["rule_id"])["suggestion"]
-            for issue in orig_issues
-            if get_rule(issue["rule_id"]) is not None
-        )
-    )
+    orig_recommendations_set = set()
+    for issue in orig_issues:
+        rule_id = issue.get("rule_id")
+
+        if not rule_id:
+            continue
+
+        rule = get_rule(rule_id)
+
+        if rule and "suggestion" in rule:
+            orig_recommendations_set.add(rule["suggestion"])
+
+    orig_recommendations = list(orig_recommendations_set)
   
 
     # -------- Optimized Code Analysis --------
@@ -34,13 +40,20 @@ def analyze_comparison(original_code: str, optimized_code: str, region: str = "I
     opt_co2 = estimate_co2(opt_energy, region)
     opt_score = calculate_green_score(opt_weight)
 
-    opt_recommendations = list(
-        set(
-            get_rule(issue["rule_id"])["suggestion"]
-            for issue in opt_issues
-            if get_rule(issue["rule_id"]) is not None
-        )
-    )
+    opt_recommendation_set = set()
+
+    for issue in opt_issues:
+        rule_id = issue.get("rule_id")  # safer than issue["rule_id"]
+        if not rule_id:
+            continue
+
+        rule = get_rule(rule_id)
+
+        if rule and "suggestion" in rule:
+            opt_recommendation_set.add(rule["suggestion"])
+
+    opt_recommendations = list(opt_recommendation_set)
+
 
     # -------- Impact metrics --------
     impact_projection = compare_optimization(orig_co2, opt_co2) # function from carbon.py
