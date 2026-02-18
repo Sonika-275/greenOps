@@ -154,7 +154,7 @@ const ComparisonDashboard = () => {
                 perRunBefore={result.original.co2_kg}
                 perRunAfter={result.optimized.co2_kg}
  
-             />
+            />
 
             </div>
           </div>
