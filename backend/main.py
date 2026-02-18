@@ -66,23 +66,11 @@ def analyze(request: CodeRequest):
     # Carbon Estimation 
     energy = estimate_energy(total_weight)
     co2 = estimate_co2(energy, region=region)
-
-    # Fetch suggestions from rules.py
-    optimization_recommendations = list(
-        set(
-            get_rule(issue["rule_id"])["suggestion"]
-            for issue in issues
-            if get_rule(issue["rule_id"]) is not None
-        )
-    )
-
-    
+ 
     return {
         "green_score": green_score, # from scoring.py
         "estimated_co2_kg":  co2,           # from carbon.py
-        "issues": issues,                  # from analyzer.py
-        "optimization_recommendations": optimization_recommendations # from rules.py
-       
+        "issues": issues,                  # from analyzer.py + suggestion from rules.py
     }
 
 

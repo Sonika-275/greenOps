@@ -13,13 +13,14 @@ class CompareRequest(BaseModel):
 # Response model for analysis results
 class Issue(BaseModel):
     rule_id: str
-    message: str
-    line: int
+    title:str
+    line: int        
     weight: int
     severity: str
+    suggestion:str
 
 class AnalyzeResponse(BaseModel):
     green_score: float
     estimated_co2_kg: float
     issues: List[Issue]
-    optimization_recommendations: List[str]
+    

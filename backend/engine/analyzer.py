@@ -77,7 +77,8 @@ def detect_nested_loops(tree):
                     rule = get_rule("R1")
                     issues.append({
                         "rule_id": "R1",
-                        "message": rule["rule_name"],
+                        "title": rule["rule_name"],
+                        "suggestion": rule["suggestion"],
                         "line": child.lineno,
                         "weight": rule["base_operation_weight"],
                         "severity": rule["severity"]
@@ -124,7 +125,8 @@ def detect_inefficient_membership(tree):
 
                                 issues.append({
                                     "rule_id": "R2",
-                                    "message": rule["rule_name"],
+                                    "title": rule["rule_name"],
+                                    "suggestion": rule["suggestion"],
                                     "line": child.lineno,
                                     "weight": rule["base_operation_weight"],
                                     "severity": rule["severity"]
@@ -150,7 +152,8 @@ def detect_object_creation_in_loop(tree):
                         rule = get_rule("R3")
                         issues.append({
                             "rule_id": "R3",
-                            "message": rule["rule_name"],
+                            "title": rule["rule_name"],
+                            "suggestion": rule["suggestion"],
                             "line": child.lineno,
                             "weight": rule["base_operation_weight"],
                             "severity": rule["severity"]
