@@ -52,12 +52,12 @@ export function activate(context: vscode.ExtensionContext) {
 
                 const data = await response.json() as AnalyzeResponse;
 
-                // ✅ Show Green Score + CO2
+                //  Show Green Score + CO2
                 vscode.window.showInformationMessage(
                     `Green Score: ${data.green_score} | CO₂: ${data.estimated_co2_kg} kg`
                 );
 
-                // ✅ Clear old highlights
+                //  Clear old highlights
                 editor.setDecorations(inefficiencyDecorationType, []);
 
                 const decorations: vscode.DecorationOptions[] = [];
@@ -96,7 +96,7 @@ export function activate(context: vscode.ExtensionContext) {
                     });
                 }
 
-                // ✅ Apply highlights
+                //  Apply highlights
                 editor.setDecorations(inefficiencyDecorationType, decorations);
 
             } catch (error: any) {

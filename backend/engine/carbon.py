@@ -1,16 +1,16 @@
 import math
 
-# 🌍 Grid emission intensity (kg CO2 per kWh)
+#  Grid emission intensity (kg CO2 per kWh)
 GRID_INTENSITY = {
     "India": 0.7,
     "USA": 0.4,
     "EU": 0.3
 }
 
-# 🌳 Tree absorption per year (kg CO2)
+#Tree absorption per year (kg CO2)
 CO2_PER_TREE_PER_YEAR = 21
 
-# 🚗 Car emission factor (kg CO2 per km)
+# car emission factor (kg CO2 per km)
 CAR_CO2_PER_KM = 0.12
 
 
@@ -18,7 +18,7 @@ def estimate_energy(total_operation_weight: float) -> float:
     """
     Estimate energy consumption in kWh based on operation weight.
     """
-    energy_factor =  0.00002  # Tunable
+    energy_factor =  0.005  # Tunable
     return round(total_operation_weight * energy_factor, 3)
 
 
@@ -44,6 +44,16 @@ def annual_projection(co2_per_run: float, executions_per_day: int = 40000) -> di
         "annual_co2_kg": annual_co2,
         "trees_needed_per_year": trees_needed
     }
+
+
+
+
+
+
+
+
+
+
 
 
 

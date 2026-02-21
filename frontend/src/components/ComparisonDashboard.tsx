@@ -13,7 +13,7 @@ const ComparisonDashboard = () => {
   const [error, setError] = useState<string | null>(null);
 
 
-  // ✅ NEW: scale state
+  //  NEW: scale state
   const [runsPerDay, setRunsPerDay] = useState(1000);
 
   const handleCompare = async () => {
@@ -34,7 +34,7 @@ const ComparisonDashboard = () => {
     }
   };
 
-  // ✅ NEW: dynamic scaling calculations
+  //  NEW: dynamic scaling calculations
   const dailyBefore =
     result ? result.original.co2_kg * runsPerDay : 0;
 

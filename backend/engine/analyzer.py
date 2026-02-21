@@ -41,10 +41,7 @@ def analyze_code(code: str):
     issues = unique_issues
 
     # Sum weights
-    for issue in issues:
-        total_operation_weight = sum(
-    issue["weight"] for issue in issues
-    )
+    total_operation_weight=sum(issue.get("weight",0) for issue in issues)
 
     return {
         "issues": issues,
@@ -148,7 +145,7 @@ def detect_object_creation_in_loop(tree):
             for child in ast.walk(node):
 
                 if isinstance(child, (ast.List, ast.Set)):
-                    if all(isinstance(elt, ast.Constant) for elt in child.elts):
+                   if len(child.elts) > 0 and all(isinstance(elt, ast.Constant) for elt in child.elts):
                         rule = get_rule("R3")
                         issues.append({
                             "rule_id": "R3",

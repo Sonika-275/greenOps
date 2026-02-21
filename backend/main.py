@@ -68,9 +68,9 @@ def analyze(request: CodeRequest):
     co2 = estimate_co2(energy, region=region)
  
     return {
-        "green_score": green_score, # from scoring.py
+        "green_score": green_score,         # from scoring.py
         "estimated_co2_kg":  co2,           # from carbon.py
-        "issues": issues,                  # from analyzer.py + suggestion from rules.py
+        "issues": issues,                   # from analyzer.py + suggestion from rules.py
     }
 
 
